@@ -7,39 +7,52 @@ bool isCardValid(int digits[], int size);
 
 int main() {
 	int digits[8], i;
-	char Q;
-	cout << "Enter 8-digit credit card # or Q to quit: ";
-	for (i = 0; i < 8; i++) {
-		cin >> digits[i];
-		cout << digits[i] << " ";
-		if (isCardValid(digits, 8) == true) {
-			cout << "Card is valid.";
+
+	while (true) {
+		int digits;
+		const int size = 8;
+		int value[size];
+
+		cout << "Enter 8-digit credit card # or Q to quit: ";
+		cin >> digits;
+
+		if(cin.fail()) break;
+
+		for (i = size - 1; i > 0; i--) {
+			int t = digits % 10;
+			value[i] = t;
+			digits /= 10;
 		}
-		else if (isCardValid(digits, 8) == false) {
-			cout << "Card is not valid.";
+		value[0] = digits;
+
+		if(isCardValid(value, size)) {
+			cout << "Card is valid." << endl;
 		}
-		
+		else {
+			cout << "Card is invalid." << endl;
+		}
 	}
-	cout << endl;
-	return 0;
 }
 
 bool isCardValid(int digits[], int size) {
 	int even = 0;
 	int odd = 0;
-	int sum;
-	for (int i = 0; i < 8; i++) {
+	int t = 0;
+	for(int i = 0; i < size; i++) {
 		if (i % 2 == 0) {
-			even += digits[i];
+			t = digits[i] * 2;
+			even += t % 10;
+			even += t / 10;
 		}
-		else 
+		else {
 			odd += digits[i];
+		}
 	}
-	sum = even + odd;
-	if (sum % 2 == 0) {
+
+	if ((even + odd) % 10 == 0) {
 		return true;
 	}
-	if (sum % 2 != 0) {
+	else {
 		return false;
 	}
 }
